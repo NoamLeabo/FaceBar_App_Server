@@ -1,7 +1,7 @@
-const posts = [{id: 1, author: "name1", content: "interesting1"},
-               {id: 2, author: "name2", content: "interesting2"},
-               {id: 3, author: "name3", content: "interesting3"},
-               {id: 4, author: "name4", content: "interesting4"}]
+const posts = [{id: 1, author: "post-1", content: "interesting-content-1"},
+               {id: 2, author: "post-2", content: "interesting-content-2"},
+               {id: 3, author: "post-3", content: "interesting-content-3"},
+               {id: 4, author: "post-4", content: "interesting-content-4"}]
 
 function getPosts(){
     return posts;

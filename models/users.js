@@ -1,7 +1,7 @@
-const users = [{id: 1, username: "name1", password: "123"},
-               {id: 2, username: "name2", password: "123"},
-               {id: 3, username: "name3", password: "123"},
-               {id: 4, username: "name4", password: "123"}]
+const users = [{id: 1, username: "noam", password: "123"},
+               {id: 2, username: "david", password: "123"},
+               {id: 3, username: "menashe", password: "123"},
+               {id: 4, username: "moshe", password: "123"}]
 
 
 function newUser(username, password){

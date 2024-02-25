@@ -2,11 +2,61 @@
 <html lang="en">
 
 <body>
-    <form method="post" action="http://localhost:8080/api/users">
-        <input  name="username" placeholder="username">
-        <input  name="password" placeholder="password">
-        <input type="submit"></input>
-    </form>
+    <input><input><button onclick="create()">Add</button><br>
+    <button onclick="getAll()">Get All Posts</button><br>
+    <input><button onclick="getPostById()">Get one post By id</button><br>
+    <input><input><button onclick="update()">update</button><br>
+    <input><button onclick="deletePost()">Delete</button><br>
+
+
+    <script>
+        async function create() {
+            const data = await fetch('http://localhost:12345/posts', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({author: document.getElementsByTagName('input')[0].value, content: document.getElementsByTagName('input')[1].value})
+            });
+            posts = await data.json();
+            console.log(posts)
+        }
+
+        async function getPostById() {
+            const data = await fetch('http://localhost:12345/posts/' + document.getElementsByTagName('input')[2].value)
+            posts = await data.json();
+            console.log(posts);
+        }
+
+        async function getAll() {
+            const data = await fetch('http://localhost:12345/posts')
+            posts = await data.json();
+            console.log(posts);
+        }
+
+        async function update() {
+            const data = await fetch('http://localhost:12345/posts/' + document.getElementsByTagName('input')[3].value, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({content: document.getElementsByTagName('input')[4].value})
+            });
+            posts = await data.json();
+            console.log(posts)
+        }
+
+        async function deletePost() {
+            const data = await fetch('http://localhost:12345/posts/' + document.getElementsByTagName('input')[5].value, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            posts = await data.json();
+            console.log(posts)
+        }
+    </script>
 </body>
 
 </html>

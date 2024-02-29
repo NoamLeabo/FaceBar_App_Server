@@ -78,4 +78,4 @@ const pendingFriend = async (id, friendId) => {
 
 
 
-module.exports = {createUser, getUsers, getUserById, updateUserPassword, deleteUser, getFriends, acceptFriend, rejectFriend}
+module.exports = {createUser, getUsers, getUserById, updateUserPassword, deleteUser, getFriends, acceptFriend, rejectFriend, pendingFriend}

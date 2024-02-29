@@ -45,7 +45,9 @@ const getFriends = async (req, res) => {
 }
 
 const pendingFriend = async (req, res) => {
-    const acc = await userService.pendingFriend(req.params.id, req.body.fid);
+    const id = req.params.id;
+    const fid = req.body.id;
+    const acc = await userService.pendingFriend(id,fid);
     if(!acc){
         return res.status(404).json({errors : ["User not found"]});
     }

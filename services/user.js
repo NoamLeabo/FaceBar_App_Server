@@ -36,5 +36,25 @@ const getFriends = async (id) => {
         return null;
     return user.friends;
 }
+const acceptFriend = async (id, friendId) => {
+    const user = await getUserById(id);
+    const friend = await getUserById(friendId);
+    if (!user || !friend)
+        return null;
+    user.friends.push(friend);
+    friend.friends.push(user);
+}
 
-module.exports = {createUser, getUsers, getUserById, updateUserPassword, deleteUser, getFriends}
+const rejectFriend = async (id, friendId) => {
+    const user = await getUserById(id);
+    const friend = await getUserById(friendId);
+    if (!user || !friend)
+        return null;
+    user.friends.pop(friend);
+    friend.friends.pop(user);
+}
+
+
+
+
+module.exports = {createUser, getUsers, getUserById, updateUserPassword, deleteUser, getFriends, acceptFriend, rejectFriend}

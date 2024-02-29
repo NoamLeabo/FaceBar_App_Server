@@ -43,5 +43,23 @@ const getFriends = async (req, res) => {
     res.json(user.getFriends);
 }
 
+const addFriend = async (req, res) => {
+}
 
-module.exports = {createUser, getUsers, getUserById, updateUserPassword, deleteUser, getFriends}
+const acceptFriend = async (req, res) => {
+    const acc = await userService.acceptFriend(req.params.id, req.params.friendId);
+    if(!acc){
+        return res.status(404).json({errors : ["User not found"]});
+    }
+    res.json({message: "Friend request accepted"});
+}
+
+const rejectFriend = async (req, res) => {
+   const acc = await userService.rejectFriend(req.params.id, req.params.friendId);  
+   if(!acc){
+    return res.status(404).json({errors : ["User not found"]});
+   }
+    res.json({message: "Friend deleted"});                   
+}
+
+module.exports = {createUser, getUsers, getUserById, updateUserPassword, deleteUser, getFriends, addFriend, acceptFriend, rejectFriend}

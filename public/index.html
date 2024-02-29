@@ -7,6 +7,7 @@
     <input><button onclick="getPostById()">Get one post By id</button><br>
     <input><input><button onclick="update()">update</button><br>
     <input><button onclick="deletePost()">Delete</button><br>
+    <button onclick="getFriends()">get friends</button><br>
 
 
     <script>
@@ -55,6 +56,11 @@
             });
             posts = await data.json();
             console.log(posts)
+        }
+
+        async function getFriends() {
+            const data = await fetch('http://localhost:12345/user/5/friends')
+        
         }
     </script>
 </body>

@@ -12,4 +12,8 @@ router.route('/:id')
     .patch(userController.updateUserPassword)
     .delete(userController.deleteUser)
 
+router.route('/:id/friends')
+    .get(userController.getFriends)
+    .post(userController.addFriend)
+
 module.exports = router;

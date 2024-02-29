@@ -30,10 +30,18 @@ const updateUserPassword = async (req, res) => {
 const deleteUser = async (req, res) => {
     const user = await userService.deleteUser(req.params.id);
     if (!user){
-        return res.status(404).json({errors : ["Uost not found"]});
+        return res.status(404).json({errors : ["User not found"]});
     }
     res.json(user);
 }
 
+const getFriends = async (req, res) => {
+    const user = await userService.getUserById(req.params.id);
+    if(!user){
+        return res.status(404).json({errors : ["User not found"]});
+    }
+    res.json(user.getFriends);
+}
 
-module.exports = {createUser, getUsers, getUserById, updateUserPassword, deleteUser}
+
+module.exports = {createUser, getUsers, getUserById, updateUserPassword, deleteUser, getFriends}

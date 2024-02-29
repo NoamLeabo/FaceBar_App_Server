@@ -30,4 +30,11 @@ const deleteUser = async (id) => {
     return user;
 }
 
-module.exports = {createUser, getUsers, getUserById, updateUserPassword, deleteUser}
+const getFriends = async (id) => {
+    const user = await getUserById(id);
+    if (!user)
+        return null;
+    return user.friends;
+}
+
+module.exports = {createUser, getUsers, getUserById, updateUserPassword, deleteUser, getFriends}

@@ -9,6 +9,9 @@
     <input><button onclick="deletePost()">Delete</button><br>
     <input><input><button onclick="addUser()">add User</button><br>
     <input><input><button onclick="addFriends()">add friends</button><br>
+    <button onclick="addfrienReq()">add friend request</button>
+    <button onclick="deleteFriends()">delete friends</button><br>
+    <button onclick="getFriends()">get friends</button><br>
 
 
     <script>
@@ -76,6 +79,31 @@
                     "Content-Type": "application/json",
                 },
             });
+        }
+        async function deleteFriends(){
+            const data = await fetch('http://localhost:12345/user/' + document.getElementsByTagName('input')[8].value + '/friends/' + document.getElementsByTagName('input')[9].value, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+        }
+        async function getFriends(){
+            const data = await fetch('http://localhost:12345/user/' + document.getElementsByTagName('input')[8].value + '/friends')
+            friends = await data.json();
+            console.log(friends);
+        }
+        async function addfrienReq(){
+            const data = await fetch('http://localhost:12345/user/' + document.getElementsByTagName('input')[8].value  + '/friends', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({id : document.getElementsByTagName('input')[9].value})
+            });
+            posts = await data.json();
+            console.log(posts)
+
         }
     </script>
 </body>

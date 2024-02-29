@@ -15,7 +15,7 @@ router.route('/:id')
 
 router.route('/:id/friends')
     .get(userController.getFriends)
-    .post(userController.addFriend)
+    .post(userController.pendingFriend)
 
 router.route('/:id/friends/:fid')
     .patch(userController.acceptFriend)

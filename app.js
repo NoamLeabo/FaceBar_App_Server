@@ -24,8 +24,8 @@ app.use(express.static("public"));
 const posts = require("./routes/post");
 const users = require("./routes/user");
 
-app.use("/api/posts", posts);
-app.use("/api/users", users);
+app.use("/posts", posts);
+app.use("/user", users);
 
 
 app.listen(process.env.PORT);

@@ -47,7 +47,7 @@ const addFriend = async (req, res) => {
 }
 
 const acceptFriend = async (req, res) => {
-    const acc = await userService.acceptFriend(req.params.id, req.params.friendId);
+    const acc = await userService.acceptFriend(req.params.id, req.params.fid);
     if(!acc){
         return res.status(404).json({errors : ["User not found"]});
     }
@@ -55,7 +55,7 @@ const acceptFriend = async (req, res) => {
 }
 
 const rejectFriend = async (req, res) => {
-   const acc = await userService.rejectFriend(req.params.id, req.params.friendId);  
+   const acc = await userService.rejectFriend(req.params.id, req.params.fid);  
    if(!acc){
     return res.status(404).json({errors : ["User not found"]});
    }

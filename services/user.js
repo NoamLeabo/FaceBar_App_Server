@@ -41,8 +41,11 @@ const acceptFriend = async (id, friendId) => {
     const friend = await getUserById(friendId);
     if (!user || !friend)
         return null;
-    user.friends.push(friend);
-    friend.friends.push(user);
+    user.friends.push(friend.id);
+    friend.friends.push(user.id);
+    user.save();
+    friend.save();
+    return true;
 }
 
 const rejectFriend = async (id, friendId) => {
@@ -50,8 +53,11 @@ const rejectFriend = async (id, friendId) => {
     const friend = await getUserById(friendId);
     if (!user || !friend)
         return null;
-    user.friends.pop(friend);
-    friend.friends.pop(user);
+    user.friends.pop(friend.id);
+    friend.friends.pop(user.id);
+    user.save();
+    friend.save();
+    return true;
 }
 
 

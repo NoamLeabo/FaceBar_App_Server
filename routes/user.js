@@ -1,6 +1,7 @@
 const userController = require("../controllers/user");
 
-const express = require("express");
+const express = require('express');
+const user = require('../models/user');
 var router = express.Router();
 
 router.route("/").post(userController.createUser).get(userController.getUsers);
@@ -14,5 +15,8 @@ router
 router.route("/:id/friends").get(userController.getFriends);
 //.post(userController.addFriend);
 
-router.route("/tokens").post(userController.generateToken);
+router.route('/:id/friends/:fid')
+    .patch(userController.acceptFriend)
+    .delete(userController.rejectFriend)
+
 module.exports = router;

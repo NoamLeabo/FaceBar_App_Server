@@ -7,7 +7,8 @@
     <input><button onclick="getPostById()">Get one post By id</button><br>
     <input><input><button onclick="update()">update</button><br>
     <input><button onclick="deletePost()">Delete</button><br>
-    <button onclick="getFriends()">get friends</button><br>
+    <input><input><button onclick="addUser()">add User</button><br>
+    <input><input><button onclick="addFriends()">add friends</button><br>
 
 
     <script>
@@ -57,10 +58,24 @@
             posts = await data.json();
             console.log(posts)
         }
-
-        async function getFriends() {
-            const data = await fetch('http://localhost:12345/user/5/friends')
-        
+        async function addUser(){
+            const data = await fetch('http://localhost:12345/user', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({fName: document.getElementsByTagName('input')[6].value, lName: document.getElementsByTagName('input')[7].value,username:"gideon12",password:"1234"})
+            });
+            posts = await data.json();
+            console.log(posts)
+        }
+        async function addFriends(){
+            const data = await fetch('http://localhost:12345/user/' + document.getElementsByTagName('input')[8].value + '/friends/' + document.getElementsByTagName('input')[9].value, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
         }
     </script>
 </body>

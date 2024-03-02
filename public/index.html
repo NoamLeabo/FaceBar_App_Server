@@ -7,9 +7,12 @@
     <input /><input /><button onclick="update()">update</button><br />
     <input /><button onclick="deletePost()">Delete</button><br />
     <input /><input /><button onclick="addUser()">add User</button><br />
-    <input /><input /><button onclick="addFriends()">add friends</button><br />
-    <input /><input /><button onclick="login()">log in</button><br />
+    <input><input><button onclick="addFriends()">add friends</button><br>
+    <button onclick="addfrienReq()">add friend request</button>
+    <button onclick="deleteFriends()">delete friends</button><br>
+    <button onclick="getFriends()">get friends</button><br>
 
+    <input /><input /><button onclick="login()">log in</button><br />
     <script>
       async function create() {
         const data = await fetch("http://localhost:12345/posts", {
@@ -114,11 +117,7 @@
           username: document.getElementsByTagName("input")[10].value,
           password: document.getElementsByTagName("input")[11].value,
         };
-        // Send post request to the server asynchrounously
-        // fetch sends the asynchrounous request
-        // The request is sent to the server according to the url that was set in: document.forms[0].action
-        // The await keyword ensures that 'res' will have the result from the server.
-        // even though 'fetch' is asynchrounous
+
         const res = await fetch("http://localhost:12345/tokens", {
           method: "post", // send a post request
           headers: {
@@ -126,27 +125,35 @@
           },
           body: JSON.stringify(data), // The actual data (username/password)
         });
-        // The server's response is a json object
         const json = await res.json();
         if (res.status != 201) alert("Invalid username and/or password");
         else {
-          // Correct username/password
-          // Take the token the server sent us
-          // and make *another* request to the homepage
-          // but attach the token to the request
-          // const res = await fetch("http://localhost:89/", {
-          //   headers: {
-          //     "Content-Type": "application/json",
-          //     authorization: "bearer " + json.token, // attach the token
-          //   },
-          // });
-          // Show the server's response
           console.log("bearer");
           console.log(json.token);
-          // const result = await res.json();
-          // alert("the secret data is: " + result.data);
         }
       }
+        async function deleteFriends(){
+            const data = await fetch('http://localhost:12345/user/' + document.getElementsByTagName('input')[8].value + '/friends/' + document.getElementsByTagName('input')[9].value, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+        }
+        async function getFriends(){
+            const data = await fetch('http://localhost:12345/user/' + document.getElementsByTagName('input')[8].value + '/friends')
+            friends = await data.json();
+            console.log(friends);
+        }
+        async function addfrienReq(){
+            const data = await fetch('http://localhost:12345/user/' + document.getElementsByTagName('input')[8].value  + '/friends', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({id : document.getElementsByTagName('input')[9].value})
+            });
+        }
     </script>
   </body>
 </html>

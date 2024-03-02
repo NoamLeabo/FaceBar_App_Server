@@ -1,4 +1,5 @@
-const userService = require("../services/user");
+const { get } = require("mongoose");
+const userService = require("../services/user")
 
 const createUser = async (req, res) => {
   res.json(
@@ -43,45 +44,37 @@ const deleteUser = async (req, res) => {
 };
 
 const getFriends = async (req, res) => {
-  const user = await userService.getUserById(req.params.id);
-  if (!user) {
-    return res.status(404).json({ errors: ["User not found"] });
-  }
-  res.json(user.getFriends);
-};
+    const user = await userService.getUserById(req.params.id);
+    if(!user){
+        return res.status(404).json({errors : ["User not found"]});
+    }
+    res.json(await userService.getFriends(req.params.id));
+}
 
-const addFriend = async (req, res) => {};
+const pendingFriend = async (req, res) => {
+    const id = req.params.id;
+    const fid = req.body.id;
+    const acc = await userService.pendingFriend(id,fid);
+    if(!acc){
+        return res.status(404).json({errors : ["User not found"]});
+    }
+    res.json({message: "Friend request sent"});
+}
 
 const acceptFriend = async (req, res) => {
-  const acc = await userService.acceptFriend(
-    req.params.id,
-    req.params.friendId
-  );
-  if (!acc) {
-    return res.status(404).json({ errors: ["User not found"] });
-  }
-  res.json({ message: "Friend request accepted" });
-};
+    const acc = await userService.acceptFriend(req.params.id, req.params.fid);
+    if(!acc){
+        return res.status(404).json({errors : ["User not found"]});
+    }
+    res.json({message: "Friend request accepted"});
+}
 
 const rejectFriend = async (req, res) => {
-  const acc = await userService.rejectFriend(
-    req.params.id,
-    req.params.friendId
-  );
-  if (!acc) {
-    return res.status(404).json({ errors: ["User not found"] });
-  }
-  res.json({ message: "Friend deleted" });
-};
+   const acc = await userService.rejectFriend(req.params.id, req.params.fid);  
+   if(!acc){
+    return res.status(404).json({errors : ["User not found"]});
+   }
+    res.json({message: "Friend deleted"});                   
+}
 
-module.exports = {
-  createUser,
-  getUsers,
-  getUserById,
-  updateUserPassword,
-  deleteUser,
-  getFriends,
-  addFriend,
-  acceptFriend,
-  rejectFriend,
-};
+module.exports = {createUser, getUsers, getUserById, updateUserPassword, deleteUser, getFriends, pendingFriend, acceptFriend, rejectFriend}

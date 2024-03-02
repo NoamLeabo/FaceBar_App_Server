@@ -39,6 +39,8 @@ const acceptFriend = async (id, friendId) => {
     const friend = await getUserById(friendId);
     if (!user || !friend)
         return null;
+    if(!user.pending.includes(friend.id) || !friend.pending.includes(user.id))
+        return null;
     user.pending.pop(friend.id);
     friend.pending.pop(user.id);    
     user.friends.push(friend.id);

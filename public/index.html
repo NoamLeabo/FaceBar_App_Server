@@ -1,83 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<body>
-    <input><input><button onclick="create()">Add</button><br>
-    <button onclick="getAll()">Get All Posts</button><br>
-    <input><button onclick="getPostById()">Get one post By id</button><br>
-    <input><input><button onclick="update()">update</button><br>
-    <input><button onclick="deletePost()">Delete</button><br>
-    <input><input><button onclick="addUser()">add User</button><br>
-    <input><input><button onclick="addFriends()">add friends</button><br>
-
+  <body>
+    <input /><input /><button onclick="create()">Add</button><br />
+    <button onclick="getAll()">Get All Posts</button><br />
+    <input /><button onclick="getPostById()">Get one post By id</button><br />
+    <input /><input /><button onclick="update()">update</button><br />
+    <input /><button onclick="deletePost()">Delete</button><br />
+    <input /><input /><button onclick="addUser()">add User</button><br />
+    <input /><input /><button onclick="addFriends()">add friends</button><br />
+    <input /><input /><button onclick="login()">log in</button><br />
 
     <script>
-        async function create() {
-            const data = await fetch('http://localhost:12345/posts', {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({author: document.getElementsByTagName('input')[0].value, content: document.getElementsByTagName('input')[1].value})
-            });
-            posts = await data.json();
-            console.log(posts)
-        }
+      async function create() {
+        const data = await fetch("http://localhost:12345/posts", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            author: document.getElementsByTagName("input")[0].value,
+            content: document.getElementsByTagName("input")[1].value,
+          }),
+        });
+        posts = await data.json();
+        console.log(posts);
+      }
 
-        async function getPostById() {
-            const data = await fetch('http://localhost:12345/posts/' + document.getElementsByTagName('input')[2].value)
-            posts = await data.json();
-            console.log(posts);
-        }
+      async function getPostById() {
+        const data = await fetch(
+          "http://localhost:12345/posts/" +
+            document.getElementsByTagName("input")[2].value
+        );
+        posts = await data.json();
+        console.log(posts);
+      }
 
-        async function getAll() {
-            const data = await fetch('http://localhost:12345/posts')
-            posts = await data.json();
-            console.log(posts);
-        }
+      async function getAll() {
+        const data = await fetch("http://localhost:12345/posts", {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: "bearer " + json.token, // attach the token
+          },
+        });
+        posts = await data.json();
+        console.log(posts);
+      }
 
-        async function update() {
-            const data = await fetch('http://localhost:12345/posts/' + document.getElementsByTagName('input')[3].value, {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({content: document.getElementsByTagName('input')[4].value})
-            });
-            posts = await data.json();
-            console.log(posts)
-        }
+      async function update() {
+        const data = await fetch(
+          "http://localhost:12345/posts/" +
+            document.getElementsByTagName("input")[3].value,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              content: document.getElementsByTagName("input")[4].value,
+            }),
+          }
+        );
+        posts = await data.json();
+        console.log(posts);
+      }
 
-        async function deletePost() {
-            const data = await fetch('http://localhost:12345/posts/' + document.getElementsByTagName('input')[5].value, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-            posts = await data.json();
-            console.log(posts)
+      async function deletePost() {
+        const data = await fetch(
+          "http://localhost:12345/posts/" +
+            document.getElementsByTagName("input")[5].value,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        posts = await data.json();
+        console.log(posts);
+      }
+      async function addUser() {
+        const data = await fetch("http://localhost:12345/user", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fName: document.getElementsByTagName("input")[6].value,
+            lName: document.getElementsByTagName("input")[7].value,
+            username: "gideon12",
+            password: "1234",
+          }),
+        });
+        posts = await data.json();
+        console.log(posts);
+      }
+      async function addFriends() {
+        const data = await fetch(
+          "http://localhost:12345/user/" +
+            document.getElementsByTagName("input")[8].value +
+            "/friends/" +
+            document.getElementsByTagName("input")[9].value,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      }
+      async function login() {
+        // Create a json object with the username and password from the form
+        const data = {
+          username: document.getElementsByTagName("input")[10].value,
+          password: document.getElementsByTagName("input")[11].value,
+        };
+        // Send post request to the server asynchrounously
+        // fetch sends the asynchrounous request
+        // The request is sent to the server according to the url that was set in: document.forms[0].action
+        // The await keyword ensures that 'res' will have the result from the server.
+        // even though 'fetch' is asynchrounous
+        const res = await fetch("http://localhost:12345/tokens", {
+          method: "post", // send a post request
+          headers: {
+            "Content-Type": "application/json", // the data (username/password) is in the form of a JSON object
+          },
+          body: JSON.stringify(data), // The actual data (username/password)
+        });
+        // The server's response is a json object
+        const json = await res.json();
+        if (res.status != 201) alert("Invalid username and/or password");
+        else {
+          // Correct username/password
+          // Take the token the server sent us
+          // and make *another* request to the homepage
+          // but attach the token to the request
+          // const res = await fetch("http://localhost:89/", {
+          //   headers: {
+          //     "Content-Type": "application/json",
+          //     authorization: "bearer " + json.token, // attach the token
+          //   },
+          // });
+          // Show the server's response
+          console.log("bearer");
+          console.log(json.token);
+          // const result = await res.json();
+          // alert("the secret data is: " + result.data);
         }
-        async function addUser(){
-            const data = await fetch('http://localhost:12345/user', {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({fName: document.getElementsByTagName('input')[6].value, lName: document.getElementsByTagName('input')[7].value,username:"gideon12",password:"1234"})
-            });
-            posts = await data.json();
-            console.log(posts)
-        }
-        async function addFriends(){
-            const data = await fetch('http://localhost:12345/user/' + document.getElementsByTagName('input')[8].value + '/friends/' + document.getElementsByTagName('input')[9].value, {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-        }
+      }
     </script>
-</body>
-
+  </body>
 </html>

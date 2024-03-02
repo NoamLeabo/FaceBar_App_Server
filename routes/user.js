@@ -1,7 +1,6 @@
 const userController = require("../controllers/user");
 
-const express = require('express');
-const user = require('../models/user');
+const express = require("express");
 var router = express.Router();
 
 router.route("/").post(userController.createUser).get(userController.getUsers);
@@ -12,11 +11,9 @@ router
   .patch(userController.updateUserPassword)
   .delete(userController.deleteUser);
 
-router.route("/:id/friends").get(userController.getFriends);
-//.post(userController.addFriend);
-
-router.route('/:id/friends/:fid')
-    .patch(userController.acceptFriend)
-    .delete(userController.rejectFriend)
+router
+  .route("/:id/friends")
+  .get(userController.getFriends)
+  .post(userController.addFriend);
 
 module.exports = router;

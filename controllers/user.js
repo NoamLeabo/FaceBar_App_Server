@@ -43,30 +43,45 @@ const deleteUser = async (req, res) => {
 };
 
 const getFriends = async (req, res) => {
-    const user = await userService.getUserById(req.params.id);
-    if(!user){
-        return res.status(404).json({errors : ["User not found"]});
-    }
-    res.json(user.getFriends);
-}
+  const user = await userService.getUserById(req.params.id);
+  if (!user) {
+    return res.status(404).json({ errors: ["User not found"] });
+  }
+  res.json(user.getFriends);
+};
 
-const addFriend = async (req, res) => {
-}
+const addFriend = async (req, res) => {};
 
 const acceptFriend = async (req, res) => {
-    const acc = await userService.acceptFriend(req.params.id, req.params.friendId);
-    if(!acc){
-        return res.status(404).json({errors : ["User not found"]});
-    }
-    res.json({message: "Friend request accepted"});
-}
+  const acc = await userService.acceptFriend(
+    req.params.id,
+    req.params.friendId
+  );
+  if (!acc) {
+    return res.status(404).json({ errors: ["User not found"] });
+  }
+  res.json({ message: "Friend request accepted" });
+};
 
 const rejectFriend = async (req, res) => {
-   const acc = await userService.rejectFriend(req.params.id, req.params.friendId);  
-   if(!acc){
-    return res.status(404).json({errors : ["User not found"]});
-   }
-    res.json({message: "Friend deleted"});                   
-}
+  const acc = await userService.rejectFriend(
+    req.params.id,
+    req.params.friendId
+  );
+  if (!acc) {
+    return res.status(404).json({ errors: ["User not found"] });
+  }
+  res.json({ message: "Friend deleted" });
+};
 
-module.exports = {createUser, getUsers, getUserById, updateUserPassword, deleteUser, getFriends, addFriend, acceptFriend, rejectFriend}
+module.exports = {
+  createUser,
+  getUsers,
+  getUserById,
+  updateUserPassword,
+  deleteUser,
+  getFriends,
+  addFriend,
+  acceptFriend,
+  rejectFriend,
+};

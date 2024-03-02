@@ -1,3 +1,4 @@
+const { get } = require("mongoose");
 const userService = require("../services/user")
 
 const createUser = async (req, res) => {
@@ -30,10 +31,43 @@ const updateUserPassword = async (req, res) => {
 const deleteUser = async (req, res) => {
     const user = await userService.deleteUser(req.params.id);
     if (!user){
-        return res.status(404).json({errors : ["Uost not found"]});
+        return res.status(404).json({errors : ["User not found"]});
     }
     res.json(user);
 }
 
+const getFriends = async (req, res) => {
+    const user = await userService.getUserById(req.params.id);
+    if(!user){
+        return res.status(404).json({errors : ["User not found"]});
+    }
+    res.json(await userService.getFriends(req.params.id));
+}
 
-module.exports = {createUser, getUsers, getUserById, updateUserPassword, deleteUser}
+const pendingFriend = async (req, res) => {
+    const id = req.params.id;
+    const fid = req.body.id;
+    const acc = await userService.pendingFriend(id,fid);
+    if(!acc){
+        return res.status(404).json({errors : ["User not found"]});
+    }
+    res.json({message: "Friend request sent"});
+}
+
+const acceptFriend = async (req, res) => {
+    const acc = await userService.acceptFriend(req.params.id, req.params.fid);
+    if(!acc){
+        return res.status(404).json({errors : ["User not found"]});
+    }
+    res.json({message: "Friend request accepted"});
+}
+
+const rejectFriend = async (req, res) => {
+   const acc = await userService.rejectFriend(req.params.id, req.params.fid);  
+   if(!acc){
+    return res.status(404).json({errors : ["User not found"]});
+   }
+    res.json({message: "Friend deleted"});                   
+}
+
+module.exports = {createUser, getUsers, getUserById, updateUserPassword, deleteUser, getFriends, pendingFriend, acceptFriend, rejectFriend}

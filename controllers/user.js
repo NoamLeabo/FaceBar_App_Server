@@ -2,14 +2,17 @@ const { get } = require("mongoose");
 const userService = require("../services/user")
 
 const createUser = async (req, res) => {
-  res.json(
-    await userService.createUser(
+    const user= await userService.createUser(
       req.body.fName,
       req.body.lName,
       req.body.username,
-      req.body.password
-    )
-  );
+      req.body.password,
+      req.body.profileImg
+    );
+    if(!user){
+      return res.status(400).json({errors: ["Username already taken"]});
+    }
+    res.json({message: "User created"});
 };
 
 const getUsers = async (req, res) => {
@@ -17,7 +20,7 @@ const getUsers = async (req, res) => {
 };
 
 const getUserById = async (req, res) => {
-  const user = await userService.getUserById(req.params.id);
+  const user = await userService.getUserByuName(req.params.id);
   if (!user) {
     return res.status(404).json({ errors: ["User not found"] });
   }

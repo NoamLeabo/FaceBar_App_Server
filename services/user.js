@@ -1,8 +1,12 @@
 const User = require("../models/user");
 
-const createUser = async (fName, lName, username, password) => {
-  const user = new User({ fName, lName, username, password });
-  return await user.save();
+const createUser = async (fName, lName, username, password, profileImg) => {
+  const user = new User({ fName, lName, username, password, profileImg});
+  const check= await User.findOne({ username: username });
+  if(check)
+  return false;
+  await user.save();
+  return true;
 };
 
 const getUsers = async () => {
@@ -75,15 +79,5 @@ const pendingFriend = async (id, friendId) => {
   return true;
 };
 
-module.exports = {
-  createUser,
-  getUsers,
-  getUserById,
-  getUserByuName,
-  updateUserPassword,
-  deleteUser,
-  getFriends,
-  acceptFriend,
-  rejectFriend,
-  pendingFriend,
-};
+
+module.exports = {createUser, getUsers, getUserById, updateUserPassword, deleteUser, getFriends, acceptFriend, rejectFriend, pendingFriend, getUserByuName}

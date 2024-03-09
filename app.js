@@ -1,9 +1,17 @@
+// import jwt from "jsonwebtoken";
+
 const express = require("express");
 var app = express();
+
+// const jwt = require("jsonwebtoken");
+// const key = "Menashe";
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
+
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
 
 const cors = require("cors");
 app.use(cors());

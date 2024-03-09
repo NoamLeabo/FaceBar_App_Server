@@ -39,8 +39,7 @@ const User = new Schema({
   ],
 
     friends: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        type: String
     }],
     pending: [{
         type: mongoose.Schema.Types.ObjectId,

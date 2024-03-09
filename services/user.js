@@ -79,5 +79,13 @@ const pendingFriend = async (id, friendId) => {
   return true;
 };
 
+const getNonFriendAuthors = async (username) => {
+  const user = await getUserByuName(username);
+  if (!user) return null;
+  const friends = await getFriends(user._id);
+  const nonFriendAuthors = await User.find({ _id: { $nin: friends.concat(user._id) } }).distinct('username');
+  return nonFriendAuthors;
+};
 
-module.exports = {createUser, getUsers, getUserById, updateUserPassword, deleteUser, getFriends, acceptFriend, rejectFriend, pendingFriend, getUserByuName}
+
+module.exports = {createUser, getUsers, getUserById, updateUserPassword, deleteUser, getFriends, acceptFriend, rejectFriend, pendingFriend, getUserByuName, getNonFriendAuthors}

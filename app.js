@@ -33,8 +33,8 @@ const posts = require("./routes/post");
 const users = require("./routes/user");
 const tokens = require("./routes/tokens");
 
-app.use("/posts", posts);
-app.use("/user", users);
-app.use("/tokens", tokens);
+app.use("/api/posts", posts);
+app.use("/api/users", users);
+app.use("/api/tokens", tokens);
 
 app.listen(process.env.PORT);

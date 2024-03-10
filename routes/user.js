@@ -10,7 +10,7 @@ router.route("/")
 router
   .route("/:id")
   .get(userController.getUserById)
-  .patch(userController.updateUserPassword)
+  .patch(userController.updateUser)
   .delete(userController.deleteUser);
 
 

@@ -20,10 +20,11 @@ const getUserById = async (id) => {
 const getUserByuName = async (uName) => {
   return await User.findOne({ username: uName });
 };
-const updateUserPassword = async (id, password) => {
+const updateUser = async (id, password, profileImg) => {
   const user = await getUserById(id);
   if (!user) return null;
   user.password = password;
+  user.profileImg = profileImg;
   await user.save();
   return user;
 };
@@ -73,9 +74,7 @@ const pendingFriend = async (id, friendId) => {
   const friend = await getUserById(friendId);
   if (!user || !friend) return null;
   user.pending.push(friend.id);
-  friend.pending.push(user.id);
   user.save();
-  friend.save();
   return true;
 };
 
@@ -88,4 +87,4 @@ const getNonFriendAuthors = async (username) => {
 };
 
 
-module.exports = {createUser, getUsers, getUserById, updateUserPassword, deleteUser, getFriends, acceptFriend, rejectFriend, pendingFriend, getUserByuName, getNonFriendAuthors}
+module.exports = {createUser, getUsers, getUserById, updateUser, deleteUser, getFriends, acceptFriend, rejectFriend, pendingFriend, getUserByuName, getNonFriendAuthors}

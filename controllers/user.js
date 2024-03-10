@@ -27,10 +27,11 @@ const getUserById = async (req, res) => {
   res.json(user);
 };
 
-const updateUserPassword = async (req, res) => {
-  const user = await userService.updateUserPassword(
+const updateUser = async (req, res) => {
+  const user = await userService.updateUser(
     req.params.id,
-    req.body.password
+    req.body.password,
+    req.body.profileImg
   );
   if (!user) {
     return res.status(404).json({ errors: ["User not found"] });
@@ -80,4 +81,4 @@ const rejectFriend = async (req, res) => {
     res.json({message: "Friend deleted"});                   
 }
 
-module.exports = {createUser, getUsers, getUserById, updateUserPassword, deleteUser, getFriends, pendingFriend, acceptFriend, rejectFriend}
+module.exports = {createUser, getUsers, getUserById, updateUser, deleteUser, getFriends, pendingFriend, acceptFriend, rejectFriend}

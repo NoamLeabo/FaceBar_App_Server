@@ -3,14 +3,25 @@ const jwt = require("jsonwebtoken");
 const key = "Menashe";
 
 const isLoggedIn = (req, res, next) => {
-  if (req.cookies.authorization) {
-    // Extract the token from that header
-    const token = req.cookies.authorization;
+  // if (req.cookies.authorization) {
+  //   // Extract the token from that header
+  //   const token = req.cookies.authorization;
+  //   try {
+  //     // Verify the token is valid
+  //     const data = jwt.verify(token, key);
+  //     console.log("The logged in user is: " + data.username);
+  //     // Token validation was successful. Continue to the actual function (index)
+  //     return next();
+  //   } catch (err) {
+  //     return res.status(401).send("Invalid Token");
+  //   }
+  // } else return res.status(403).send("Token required");
+  //////////////////////////////////////////////////////////
+  if(req.headers.authorization){
+    const token = req.headers.authorization.split(" ")[1];
     try {
-      // Verify the token is valid
       const data = jwt.verify(token, key);
       console.log("The logged in user is: " + data.username);
-      // Token validation was successful. Continue to the actual function (index)
       return next();
     } catch (err) {
       return res.status(401).send("Invalid Token");
@@ -27,8 +38,8 @@ const generateToken = async (req, res) => {
       // Generate the token.
       const token = jwt.sign(data, key);
       // Return the token to the browser
-      res.cookie("authorization", token);
-      res.status(201).json({ token });
+      //res.cookie("authorization", token);
+      res.status(201).json(token);
     }
     // Incorrect username/password. The user should try again.
     else res.status(404).send("Invalid username and/or password");

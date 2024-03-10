@@ -5,6 +5,7 @@ var router = express.Router();
 
 
 
-router.route("/").post(tokensController.generateToken);
+router.route("/")
+.post(tokensController.generateToken);
 
 module.exports = router;

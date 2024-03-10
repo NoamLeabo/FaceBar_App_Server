@@ -6,7 +6,7 @@ const createPost = async (req, res) => {
 
 const getPosts = async (req, res) => {
     const key = "Menashe";
-    const token = req.cookies.authorization;
+    const token = req.headers.authorization;
     try {
       // Verify the token is valid
       const data = jwt.verify(token, key);

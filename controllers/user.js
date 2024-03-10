@@ -48,7 +48,7 @@ const deleteUser = async (req, res) => {
 };
 
 const getFriends = async (req, res) => {
-    const user = await userService.getUserById(req.params.id);
+    const user = await userService.getUserByuName(req.params.id);
     if(!user){
         return res.status(404).json({errors : ["User not found"]});
     }

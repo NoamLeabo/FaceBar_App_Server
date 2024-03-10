@@ -13,15 +13,12 @@ const getUsers = async () => {
   return await User.find({});
 };
 
-const getUserById = async (id) => {
-  return await User.findById(id);
-};
 
 const getUserByuName = async (uName) => {
   return await User.findOne({ username: uName });
 };
 const updateUser = async (id, password, profileImg) => {
-  const user = await getUserById(id);
+  const user = await getUserByuName(id);
   if (!user) return null;
   user.password = password;
   user.profileImg = profileImg;
@@ -30,20 +27,20 @@ const updateUser = async (id, password, profileImg) => {
 };
 
 const deleteUser = async (id) => {
-  const user = await getUserById(id);
+  const user = await getUserByuName(id);
   if (!user) return null;
   await user.deleteOne();
   return user;
 };
 
 const getFriends = async (id) => {
-  const user = await getUserById(id);
+  const user = await getUserByuName(id);
   if (!user) return null;
   return user.friends;
 };
 const acceptFriend = async (id, friendId) => {
-  const user = await getUserById(id);
-  const friend = await getUserById(friendId);
+  const user = await getUserByuName(id);
+  const friend = await getUserByuName(friendId);
   if (!user || !friend) return null;
   if (!user.pending.includes(friend.id) || !friend.pending.includes(user.id))
     return null;
@@ -57,8 +54,8 @@ const acceptFriend = async (id, friendId) => {
 };
 
 const rejectFriend = async (id, friendId) => {
-  const user = await getUserById(id);
-  const friend = await getUserById(friendId);
+  const user = await getUserByuName(id);
+  const friend = await getUserByuName(friendId);
   if (!user || !friend) return null;
   user.pending.pop(friend.id);
   friend.pending.pop(user.id);
@@ -70,8 +67,8 @@ const rejectFriend = async (id, friendId) => {
 };
 
 const pendingFriend = async (id, friendId) => {
-  const user = await getUserById(id);
-  const friend = await getUserById(friendId);
+  const user = await getUserByuName(id);
+  const friend = await getUserByuName(friendId);
   if (!user || !friend) return null;
   user.pending.push(friend.id);
   user.save();
@@ -87,4 +84,4 @@ const getNonFriendAuthors = async (username) => {
 };
 
 
-module.exports = {createUser, getUsers, getUserById, updateUser, deleteUser, getFriends, acceptFriend, rejectFriend, pendingFriend, getUserByuName, getNonFriendAuthors}
+module.exports = {createUser, getUsers, updateUser, deleteUser, getFriends, acceptFriend, rejectFriend, pendingFriend, getUserByuName, getNonFriendAuthors}

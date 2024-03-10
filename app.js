@@ -10,6 +10,8 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.use(bodyParser.json({ limit: "5mb" }));
+
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 

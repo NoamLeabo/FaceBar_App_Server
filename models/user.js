@@ -38,14 +38,17 @@ const User = new Schema({
     },
   ],
 
-    friends: [{
-        type: String
-    }],
-    pending: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    }]
-
+  friends: [
+    {
+      type: String,
+    },
+  ],
+  pending: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
 });
 
 module.exports = mongoose.model("User", User);

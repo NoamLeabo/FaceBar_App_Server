@@ -10,9 +10,11 @@ const isLoggedIn = (req, res, next) => {
       // Verify the token is valid
       const data = jwt.verify(token, key);
       console.log("The logged in user is: " + data.username);
+      // res.redirect("/home");
       // Token validation was successful. Continue to the actual function (index)
       return next();
     } catch (err) {
+      console.log("error in token");
       return res.status(401).send("Invalid Token");
     }
   } else return res.status(403).send("Token required");
@@ -28,6 +30,7 @@ const generateToken = async (req, res) => {
       const token = jwt.sign(data, key);
       // Return the token to the browser
       res.cookie("authorization", token);
+      console.log("cookie");
       res.status(201).json({ token });
     }
     // Incorrect username/password. The user should try again.

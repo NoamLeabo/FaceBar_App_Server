@@ -26,7 +26,7 @@ const getPostById = async (req, res) => {
 }
 
 const updatePost = async (req, res) => {
-    const post = await postService.updatePost(req.params.id, req.body.content);
+    const post = await postService.updatePost(req.params.id, req.body.content, req.body.imageView);
     if (!post){
         return res.status(404).json({errors : ["Post not found"]});
     }

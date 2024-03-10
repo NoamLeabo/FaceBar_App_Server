@@ -6,16 +6,17 @@ const createPost = async (req, res) => {
 };
 
 const getPosts = async (req, res) => {
-  const key = "Menashe";
-  const token = req.cookies.authorization;
-  try {
-    // Verify the token is valid
-    const data = jwt.verify(token, key);
-    const username = data.username;
-    res.json(await postService.getPosts(username));
-  } catch (err) {
-    return res.status(401).send("controller failed");
-  }
+  //   const key = "Menashe";
+  //   const token = req.cookies.authorization;
+  //   try {
+  //     // Verify the token is valid
+  //     const data = jwt.verify(token, key);
+  //     const username = data.username;
+  //     res.json(await postService.getPosts(username));
+  //   } catch (err) {
+  //     return res.status(401).send("controller failed");
+  //   }
+  res.json(await postService.getPosts());
 };
 
 const getPostById = async (req, res) => {

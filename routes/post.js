@@ -9,7 +9,7 @@ router.route("/").post(postController.createPost).get(postController.getPosts);
 
 router
   .route("/:id")
-  .get(isLoggedIn, postController.getPostById)
+  .get(postController.getPostById)
   .patch(postController.updatePost)
   .delete(postController.deletePost);
 

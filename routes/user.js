@@ -3,9 +3,7 @@ const userController = require("../controllers/user");
 const express = require("express");
 var router = express.Router();
 
-router.route("/")
-.post(userController.createUser)
-.get(userController.getUsers);
+router.route("/").post(userController.createUser).get(userController.getUsers);
 
 router
   .route("/:id")
@@ -13,13 +11,14 @@ router
   .patch(userController.updateUserPassword)
   .delete(userController.deleteUser);
 
+router
+  .route("/:id/friends")
+  .get(userController.getFriends)
+  .post(userController.pendingFriend);
 
-router.route('/:id/friends')
-    .get(userController.getFriends)
-    .post(userController.pendingFriend)
-
-router.route('/:id/friends/:fid')
-    .patch(userController.acceptFriend)
-    .delete(userController.rejectFriend)
+router
+  .route("/:id/friends/:fid")
+  .patch(userController.acceptFriend)
+  .delete(userController.rejectFriend);
 
 module.exports = router;

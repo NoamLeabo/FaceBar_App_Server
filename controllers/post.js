@@ -1,4 +1,5 @@
 const postService = require("../services/post")
+const jwt = require("jsonwebtoken");
 
 const createPost = async (req, res) => {
     res.json(await postService.createPost(req.body.author, req.body.content));
@@ -6,10 +7,11 @@ const createPost = async (req, res) => {
 
 const getPosts = async (req, res) => {
     const key = "Menashe";
-    const token = req.headers.authorization;
+    const token = req.headers.authorization.split(" ")[1];
     try {
       // Verify the token is valid
       const data = jwt.verify(token, key);
+      console.log("The logged in user is: " + data.username);
       const username = data.username
       res.json(await postService.getPosts(username));
     } catch (err) {

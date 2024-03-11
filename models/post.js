@@ -9,9 +9,12 @@ const Post = new Schema({
     required: true,
   },
 
+  profilePic: {
+    type: String
+  },
+
   published: {
-    type: Date,
-    default: Date.now,
+    type: String
   },
 
   content: {
@@ -32,6 +35,10 @@ const Post = new Schema({
   imageView: {
     type: String,
   },
+  
+  commentsInt: [{
+    type: Number
+}],
 });
 
 module.exports = mongoose.model("Post", Post);

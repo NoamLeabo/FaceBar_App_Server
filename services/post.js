@@ -1,48 +1,50 @@
 const Post = require("../models/post");
 const userService = require("../services/user");
 
-const createPost = async (author, content, imageView) => {
-  const post = new Post({ author, content, imageView });
-  return await post.save();
-};
+const createPost = async (author, content, imageView, published,profilePic) => {
+    const post = new Post({author, profilePic, published, content, imageView});
+    return await post.save(); 
+}
 
 const getPosts = async (username) => {
-  // const user = await userService.getUserByuName(username);
-  // const friends = user.friends;
+    try {
+        const user = await userService.getUserByuName(username);
+        const friends = user.friends;
 
-  // const friendPosts = await Post.find({ author: { $in: friends } })
-  //                                 .sort({ published: -1 })
-  //                                 .limit(20);
+        const friendPosts = await Post.find({ author: { $in: friends } })
+            .sort({ published: -1 })
+            .limit(20);
 
-  // const nonFriendAuthors = await userService.getNonFriendAuthors(username);
+        const nonFriendPosts = await Post.find({ author: { $nin: friends } })
+            .sort({ published: -1 })
+            .limit(5);
 
-  // let nonFriendPosts = [];
-  // for (const author of nonFriendAuthors) {
-  //     const posts = await Post.find({ author }).limit(5);
-  //     nonFriendPosts = nonFriendPosts.concat(posts);
-  // }
+        const allPosts = friendPosts.concat(nonFriendPosts);
 
-  // const allPosts = friendPosts.concat(nonFriendPosts);
+        allPosts.sort((a, b) => b.published - a.published);
 
-  // allPosts.sort((a, b) => b.published - a.published);
+        return allPosts;
+    } catch (error) {
+        // Handle errors, for example:
+        console.error("Error fetching posts:", error);
+        return []; // Return an empty array or handle the error appropriately.
+    }
+}
 
-  // const finalPosts = allPosts.slice(0, 20);
-
-  // return finalPosts;
-  return await Post.find({});
-};
 
 const getPostById = async (id) => {
   return await Post.findById(id);
 };
 
-const updatePost = async (id, content) => {
-  const post = await getPostById(id);
-  if (!post) return null;
-  post.content = content;
-  await post.save();
-  return post;
-};
+const updatePost = async (id, content, imageView) => {
+    const post = await getPostById(id)
+    if (!post)
+        return null;
+    post.content = content;
+    post.imageView = imageView;
+    await post.save();
+    return post;
+}
 
 const deletePost = async (id) => {
   const post = await getPostById(id);

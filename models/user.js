@@ -37,18 +37,13 @@ const User = new Schema({
       ref: "Post",
     },
   ],
+    friends: [{
+        type: String
+    }],
+    pending: [{
+        type: String
+    }]
 
-  friends: [
-    {
-      type: String,
-    },
-  ],
-  pending: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
-  ],
 });
 
 module.exports = mongoose.model("User", User);

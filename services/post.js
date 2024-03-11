@@ -1,34 +1,34 @@
 const Post = require('../models/post');
 const userService = require("../services/user")
 
-const createPost = async (author, content) => {
-    const post = new Post({author, content});
+const createPost = async (author, content, imageView, published,profilePic) => {
+    const post = new Post({author, profilePic, published, content, imageView});
     return await post.save(); 
 }
 
 const getPosts = async (username) => {
-    const user = await userService.getUserByuName(username);
-    const friends = user.friends;
-    
-    const friendPosts = await Post.find({ author: { $in: friends } })
-                                    .sort({ published: -1 })
-                                    .limit(20);
-    
-    const nonFriendAuthors = await userService.getNonFriendAuthors(username);
-    
-    let nonFriendPosts = [];
-    for (const author of nonFriendAuthors) {
-        const posts = await Post.find({ author }).limit(5);
-        nonFriendPosts = nonFriendPosts.concat(posts);
+    try {
+        const user = await userService.getUserByuName(username);
+        const friends = user.friends;
+
+        const friendPosts = await Post.find({ author: { $in: friends } })
+            .sort({ published: -1 })
+            .limit(20);
+
+        const nonFriendPosts = await Post.find({ author: { $nin: friends } })
+            .sort({ published: -1 })
+            .limit(5);
+
+        const allPosts = friendPosts.concat(nonFriendPosts);
+
+        allPosts.sort((a, b) => b.published - a.published);
+
+        return allPosts;
+    } catch (error) {
+        // Handle errors, for example:
+        console.error("Error fetching posts:", error);
+        return []; // Return an empty array or handle the error appropriately.
     }
-    
-    const allPosts = friendPosts.concat(nonFriendPosts);
-    
-    allPosts.sort((a, b) => b.published - a.published);
-    
-    const finalPosts = allPosts.slice(0, 20);
-    
-    return finalPosts;
 }
 
 const getPostById = async (id) => {

@@ -4,7 +4,9 @@ const express = require("express");
 const { isLoggedIn } = require("../controllers/tokens");
 var router = express.Router();
 
-router.route("/").post(postController.createPost).get(postController.getPosts);
+router
+.route("/")
+.get(postController.getPosts);
 // .get(isLoggedIn, postController.getPosts);
 
 router

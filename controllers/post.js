@@ -2,7 +2,7 @@ const postService = require("../services/post")
 const jwt = require("jsonwebtoken");
 
 const createPost = async (req, res) => {
-    res.json(await postService.createPost(req.body.author, req.body.content));
+    res.json(await postService.createPost(req.params.id, req.body.content, req.body.imageView, req.body.published, req.body.profilePic));
 }
 
 const getPosts = async (req, res) => {

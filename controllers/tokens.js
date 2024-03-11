@@ -22,8 +22,11 @@ const isLoggedIn = (req, res, next) => {
     try {
       const data = jwt.verify(token, key);
       console.log("The logged in user is: " + data.username);
+      // res.redirect("/home");
+      // Token validation was successful. Continue to the actual function (index)
       return next();
     } catch (err) {
+      console.log("error in token");
       return res.status(401).send("Invalid Token");
     }
   } else return res.status(403).send("Token required");

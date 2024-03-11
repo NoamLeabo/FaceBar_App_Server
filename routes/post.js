@@ -11,7 +11,7 @@ router
 
 router
   .route("/:id")
-  .get(isLoggedIn, postController.getPostById)
+  .get(postController.getPostById)
   .patch(postController.updatePost)
   .delete(postController.deletePost);
 

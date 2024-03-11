@@ -1,5 +1,5 @@
-const Post = require('../models/post');
-const userService = require("../services/user")
+const Post = require("../models/post");
+const userService = require("../services/user");
 
 const createPost = async (author, content, imageView, published,profilePic) => {
     const post = new Post({author, profilePic, published, content, imageView});
@@ -31,9 +31,10 @@ const getPosts = async (username) => {
     }
 }
 
+
 const getPostById = async (id) => {
-    return await Post.findById(id);
-}
+  return await Post.findById(id);
+};
 
 const updatePost = async (id, content, imageView) => {
     const post = await getPostById(id)
@@ -46,12 +47,10 @@ const updatePost = async (id, content, imageView) => {
 }
 
 const deletePost = async (id) => {
-    const post = await getPostById(id)
-    if (!post)
-        return null;
-    await post.deleteOne();
-    return post;
-}
+  const post = await getPostById(id);
+  if (!post) return null;
+  await post.deleteOne();
+  return post;
+};
 
-
-module.exports = {createPost, getPosts, getPostById, updatePost, deletePost}
+module.exports = { createPost, getPosts, getPostById, updatePost, deletePost };

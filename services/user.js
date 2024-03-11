@@ -1,10 +1,9 @@
 const User = require("../models/user");
 
 const createUser = async (fName, lName, username, password, profileImg) => {
-  const user = new User({ fName, lName, username, password, profileImg});
-  const check= await User.findOne({ username: username });
-  if(check)
-  return false;
+  const user = new User({ fName, lName, username, password, profileImg });
+  const check = await User.findOne({ username: username });
+  if (check) return false;
   await user.save();
   return true;
 };
@@ -79,9 +78,10 @@ const getNonFriendAuthors = async (username) => {
   const user = await getUserByuName(username);
   if (!user) return null;
   const friends = await getFriends(user._id);
-  const nonFriendAuthors = await User.find({ _id: { $nin: friends.concat(user._id) } }).distinct('username');
+  const nonFriendAuthors = await User.find({
+    _id: { $nin: friends.concat(user._id) },
+  }).distinct("username");
   return nonFriendAuthors;
 };
-
 
 module.exports = {createUser, getUsers, updateUser, deleteUser, getFriends, acceptFriend, rejectFriend, pendingFriend, getUserByuName, getNonFriendAuthors}

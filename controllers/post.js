@@ -1,3 +1,4 @@
+
 const postService = require("../services/post")
 const jwt = require("jsonwebtoken");
 
@@ -20,12 +21,12 @@ const getPosts = async (req, res) => {
 }
 
 const getPostById = async (req, res) => {
-    const post = await postService.getPostById(req.params.id);
-    if (!post){
-        return res.status(404).json({errors : ["Post not found"]});
-    }
-    res.json(post);
-}
+  const post = await postService.getPostById(req.params.id);
+  if (!post) {
+    return res.status(404).json({ errors: ["Post not found"] });
+  }
+  res.json(post);
+};
 
 const updatePost = async (req, res) => {
     const post = await postService.updatePost(req.params.id, req.body.content, req.body.imageView);
@@ -36,11 +37,11 @@ const updatePost = async (req, res) => {
 }
 
 const deletePost = async (req, res) => {
-    const post = await postService.deletePost(req.params.id);
-    if (!post){
-        return res.status(404).json({errors : ["Post not found"]});
-    }
-    res.json(post);
-}
+  const post = await postService.deletePost(req.params.id);
+  if (!post) {
+    return res.status(404).json({ errors: ["Post not found"] });
+  }
+  res.json(post);
+};
 
-module.exports = {createPost, getPosts, getPostById, updatePost, deletePost}
+module.exports = { createPost, getPosts, getPostById, updatePost, deletePost };

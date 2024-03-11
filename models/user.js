@@ -37,7 +37,6 @@ const User = new Schema({
       ref: "Post",
     },
   ],
-
     friends: [{
         type: String
     }],

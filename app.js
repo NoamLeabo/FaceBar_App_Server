@@ -5,10 +5,15 @@ var app = express();
 
 // const jwt = require("jsonwebtoken");
 // const key = "Menashe";
+const http = require("http");
+
+const server = http.createServer({ maxHttpHeaderSize: 65536 }, app);
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
+
+app.use(bodyParser.json({ limit: "500mb" }));
 
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());

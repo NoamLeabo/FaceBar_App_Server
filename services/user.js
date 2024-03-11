@@ -69,8 +69,8 @@ const pendingFriend = async (id, friendId) => {
   const user = await getUserByuName(id);
   const friend = await getUserByuName(friendId);
   if (!user || !friend) return null;
-  user.pending.push(friend.id);
-  user.save();
+  friend.pending.push(user.username);
+  friend.save();
   return true;
 };
 

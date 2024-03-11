@@ -36,12 +36,13 @@ const getPostById = async (id) => {
   return await Post.findById(id);
 };
 
-const updatePost = async (id, content, imageView) => {
+const updatePost = async (id, content, imageView, published) => {
     const post = await getPostById(id)
     if (!post)
         return null;
     post.content = content;
     post.imageView = imageView;
+    post.published = published;
     await post.save();
     return post;
 }

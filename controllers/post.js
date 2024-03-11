@@ -29,19 +29,19 @@ const getPostById = async (req, res) => {
 };
 
 const updatePost = async (req, res) => {
-    const post = await postService.updatePost(req.params.id, req.body.content, req.body.imageView);
-    if (!post){
-        return res.status(404).json({errors : ["Post not found"]});
-    }
-    res.json(post);
+  const post = await postService.updatePost(req.params.pid, req.body.content, req.body.imageView, req.body.published);
+  if (!post){
+      return res.status(404).json({errors : ["Post not found"]});
+  }
+  res.json(post);
 }
 
 const deletePost = async (req, res) => {
-  const post = await postService.deletePost(req.params.id);
-  if (!post) {
-    return res.status(404).json({ errors: ["Post not found"] });
+  const post = await postService.deletePost(req.params.pid);
+  if (!post){
+      return res.status(404).json({errors : ["Post not found"]});
   }
   res.json(post);
-};
+}
 
 module.exports = { createPost, getPosts, getPostById, updatePost, deletePost };

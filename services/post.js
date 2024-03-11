@@ -1,8 +1,8 @@
 const Post = require("../models/post");
 const userService = require("../services/user");
 
-const createPost = async (author, content) => {
-  const post = new Post({ author, content });
+const createPost = async (author, content, imageView) => {
+  const post = new Post({ author, content, imageView });
   return await post.save();
 };
 

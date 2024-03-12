@@ -69,10 +69,11 @@ const likePost = async (id, pid) => {
     const post = await getPostById(pid);
     const user = await userService.getUserByuName(id);
     if (!post || !user) return null;
-    if (post.usersWhoLiked.includes(id))
-        post.usersWhoLiked.pop(id)
-    else
+    if (post.usersWhoLiked.includes(id)) {
+        post.usersWhoLiked = post.usersWhoLiked.filter(userId => userId !== id);
+      } else {
         post.usersWhoLiked.push(id);  
+      }
     post.save();
     return post;
   };
@@ -80,13 +81,21 @@ const likePost = async (id, pid) => {
 const getUserPosts = async (username) => {
     try {
         const user = await userService.getUserByuName(username);
+        if (!user) return null;
+
         const userPosts = await Post.find({ author: username })
             .sort({ published: -1 });
 
-        userPosts.sort((a, b) => b.published - a.published);
+            let finishPosts = userPosts;
 
-        return userPosts;
-    } catch (error) {
+            finishPosts = finishPosts.sort((a, b) => {
+                const timeA = parseTime(a.published);
+                const timeB = parseTime(b.published);
+                return timeB - timeA;
+            });
+            finishPosts= finishPosts.reverse();
+            return finishPosts;
+        } catch (error) {
         // Handle errors, for example:
         console.error("Error fetching posts:", error);
         return []; // Return an empty array or handle the error appropriately.

@@ -42,7 +42,7 @@ const generateToken = async (req, res) => {
       const token = jwt.sign(data, key);
       // Return the token to the browser
       //res.cookie("authorization", token);
-      res.status(201).json({ token });
+      res.status(201).json(token);
     }
     // Incorrect username/password. The user should try again.
     else res.status(404).send("Invalid username and/or password");

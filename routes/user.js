@@ -19,7 +19,8 @@ router.route("/:id/posts")
 
 router.route("/:id/posts/:pid")
   .patch(postController.updatePost)
-  .delete(postController.deletePost);
+  .delete(postController.deletePost)
+  .post(postController.likePost);
 
 router.route('/:id/friends')
     .get(userController.getFriends)

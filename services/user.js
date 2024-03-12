@@ -30,8 +30,25 @@ const updateUser = async (id, password, profileImg) => {
 const deleteUser = async (id) => {
   const user = await getUserByuName(id);
   if (!user) return null;
-  await Post.deleteMany({author : id});
+
+  // Remove the user from other users' pending lists
+  await User.updateMany(
+      { pending: user.username },
+      { $pull: { pending: user.username } }
+  );
+
+  // Remove the user from other users' friends lists
+  await User.updateMany(
+      { friends: user.username },
+      { $pull: { friends: user.username } }
+  );
+
+  // Delete all posts authored by the user
+  await Post.deleteMany({ author: id });
+
+  // Delete the user
   await user.deleteOne();
+  
   return user;
 };
 

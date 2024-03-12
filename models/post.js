@@ -39,6 +39,9 @@ const Post = new Schema({
   commentsInt: [{
     type: Number
 }],
+  usersWhoLiked: [{
+    type: String,
+}],
 });
 
 module.exports = mongoose.model("Post", Post);

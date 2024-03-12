@@ -24,6 +24,10 @@ const getPosts = async (req, res) => {
       }
 }
 
+const likePost = async (req, res) => {
+  res.json(await postService.likePost(req.params.id, req.params.pid));
+}
+
 const getPostById = async (req, res) => {
   const post = await postService.getPostById(req.params.id);
   if (!post) {
@@ -48,4 +52,4 @@ const deletePost = async (req, res) => {
   res.json(post);
 }
 
-module.exports = { createPost, getPosts, getPostById, updatePost, deletePost, getUserPosts };
+module.exports = { createPost, getPosts, getPostById, updatePost, deletePost, getUserPosts, likePost };

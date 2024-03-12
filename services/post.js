@@ -52,9 +52,22 @@ const updatePost = async (id, content, imageView, published) => {
 const deletePost = async (id) => {
   const post = await getPostById(id);
   if (!post) return null;
+  
   await post.deleteOne();
   return post;
 };
+
+const likePost = async (id, pid) => {
+    const post = await getPostById(pid);
+    const user = await userService.getUserByuName(id);
+    if (!post || !user) return null;
+    if (post.usersWhoLiked.includes(id))
+        post.usersWhoLiked.pop(id)
+    else
+        post.usersWhoLiked.push(id);  
+    post.save();
+    return post;
+  };
 
 const getUserPosts = async (username) => {
     try {
@@ -71,4 +84,4 @@ const getUserPosts = async (username) => {
         return []; // Return an empty array or handle the error appropriately.
     }
 }
-module.exports = { createPost, getPosts, getPostById, updatePost, deletePost , getUserPosts};
+module.exports = { createPost, getPosts, getPostById, updatePost, deletePost , getUserPosts, likePost};

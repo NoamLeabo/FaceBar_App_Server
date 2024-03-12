@@ -14,7 +14,7 @@ router.route("/:id")
   .delete(userController.deleteUser);
 
 router.route("/:id/posts")
-  .get(userController.getUserById)
+  .get(postController.getUserPosts)
   .post(postController.createPost);
 
 router.route("/:id/posts/:pid")

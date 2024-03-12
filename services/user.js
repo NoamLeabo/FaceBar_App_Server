@@ -1,4 +1,7 @@
+const Post = require("../models/post");
 const User = require("../models/user");
+const postService = require("../services/post");
+
 
 const createUser = async (fName, lName, username, password, profileImg) => {
   const user = new User({ fName, lName, username, password, profileImg });
@@ -11,7 +14,6 @@ const createUser = async (fName, lName, username, password, profileImg) => {
 const getUsers = async () => {
   return await User.find({});
 };
-
 
 const getUserByuName = async (uName) => {
   return await User.findOne({ username: uName });
@@ -28,6 +30,7 @@ const updateUser = async (id, password, profileImg) => {
 const deleteUser = async (id) => {
   const user = await getUserByuName(id);
   if (!user) return null;
+  await Post.deleteMany({author : id});
   await user.deleteOne();
   return user;
 };
@@ -41,12 +44,10 @@ const acceptFriend = async (id, friendId) => {
   const user = await getUserByuName(id);
   const friend = await getUserByuName(friendId);
   if (!user || !friend) return null;
-  if (!user.pending.includes(friend.id) || !friend.pending.includes(user.id))
-    return null;
-  user.pending.pop(friend.id);
-  friend.pending.pop(user.id);
-  user.friends.push(friend.id);
-  friend.friends.push(user.id);
+  if (!user.pending.includes(friend.username)) return null;
+  user.pending.pop(friend.username);
+  user.friends.push(friend.username);
+  friend.friends.push(user.username);
   user.save();
   friend.save();
   return true;
@@ -56,13 +57,18 @@ const rejectFriend = async (id, friendId) => {
   const user = await getUserByuName(id);
   const friend = await getUserByuName(friendId);
   if (!user || !friend) return null;
-  user.pending.pop(friend.id);
-  friend.pending.pop(user.id);
-  user.friends.pop(friend.id);
-  friend.friends.pop(user.id);
-  user.save();
-  friend.save();
-  return true;
+  if (user.pending.includes(friend.username)) {
+    user.pending.pop(friend.username);
+    user.save();
+    friend.save();
+    return true;
+  } else {
+    user.friends.pop(friend.username);
+    friend.friends.pop(user.username);
+    user.save();
+    friend.save();
+    return true;
+  }
 };
 
 const pendingFriend = async (id, friendId) => {
@@ -84,4 +90,15 @@ const getNonFriendAuthors = async (username) => {
   return nonFriendAuthors;
 };
 
-module.exports = {createUser, getUsers, updateUser, deleteUser, getFriends, acceptFriend, rejectFriend, pendingFriend, getUserByuName, getNonFriendAuthors}
+module.exports = {
+  createUser,
+  getUsers,
+  updateUser,
+  deleteUser,
+  getFriends,
+  acceptFriend,
+  rejectFriend,
+  pendingFriend,
+  getUserByuName,
+  getNonFriendAuthors,
+};

@@ -6,6 +6,10 @@ const createPost = async (req, res) => {
     res.json(await postService.createPost(req.params.id, req.body.content, req.body.imageView, req.body.published, req.body.profilePic));
 }
 
+const getUserPosts = async (req, res) => {
+  res.json(await postService.getUserPosts(req.params.id));
+}
+
 const getPosts = async (req, res) => {
     const key = "Menashe";
     const token = req.headers.authorization.split(" ")[1];
@@ -44,4 +48,4 @@ const deletePost = async (req, res) => {
   res.json(post);
 }
 
-module.exports = { createPost, getPosts, getPostById, updatePost, deletePost };
+module.exports = { createPost, getPosts, getPostById, updatePost, deletePost, getUserPosts };

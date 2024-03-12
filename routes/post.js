@@ -5,9 +5,10 @@ const { isLoggedIn } = require("../controllers/tokens");
 var router = express.Router();
 
 router
-.route("/")
-.get(postController.getPosts);
-// .get(isLoggedIn, postController.getPosts);
+  .route("/")
+  .get(postController.getPosts)
+  // .get(isLoggedIn, postController.getPosts);
+  .post(isLoggedIn, postController.createPost);
 
 router
   .route("/:id")

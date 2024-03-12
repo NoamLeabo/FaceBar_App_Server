@@ -6,25 +6,33 @@ const createPost = async (author, content, imageView, published,profilePic) => {
     return await post.save(); 
 }
 
+// Helper function to parse time from "HH:MM, DD/MM" format to a number (minutes from midnight)
+function parseTime(timeStr) {
+    const [hours, minutes] = timeStr.split(', ')[0].split(':');
+    return Number(hours) * 60 + Number(minutes);
+}
 const getPosts = async (username) => {
     try {
         const user = await userService.getUserByuName(username);
         const friends = user.friends;
 
         const friendPosts = await Post.find({ author: { $in: friends } })
-            .sort({ _id: +1 })
+            .sort({ _id: -1 })  // Sort in descending order by _id
             .limit(20);
 
-       const nonFriendPosts = await Post.find({ author: { $nin: friends } })
-    .sort({ _id: -1 })  // Sort in descending order by _id
-    .limit(5); 
+        const nonFriendPosts = await Post.find({ author: { $nin: friends } })
+            .sort({ _id: -1 })  // Sort in descending order by _id
+            .limit(5); 
 
-    nonFriendPosts.sort((a, b) => b._id - a._id);
+        let allPosts = friendPosts.concat(nonFriendPosts);
 
-        const allPosts = friendPosts.concat(nonFriendPosts);
-
-        // Sort allPosts by _id
-        allPosts.sort((a, b) => a._id - b._id);
+         // Sort allPosts by published in descending order (most recent first)
+         allPosts = allPosts.sort((a, b) => {
+            const timeA = parseTime(a.published);
+            const timeB = parseTime(b.published);
+            return timeB - timeA;
+        });
+        allPosts= allPosts.reverse();
         return allPosts;
     } catch (error) {
         // Handle errors, for example:

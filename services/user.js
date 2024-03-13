@@ -2,7 +2,6 @@ const Post = require("../models/post");
 const User = require("../models/user");
 const postService = require("../services/post");
 
-
 const createUser = async (fName, lName, username, password, profileImg) => {
   const user = new User({ fName, lName, username, password, profileImg });
   const check = await User.findOne({ username: username });
@@ -33,14 +32,14 @@ const deleteUser = async (id) => {
 
   // Remove the user from other users' pending lists
   await User.updateMany(
-      { pending: user.username },
-      { $pull: { pending: user.username } }
+    { pending: user.username },
+    { $pull: { pending: user.username } }
   );
 
   // Remove the user from other users' friends lists
   await User.updateMany(
-      { friends: user.username },
-      { $pull: { friends: user.username } }
+    { friends: user.username },
+    { $pull: { friends: user.username } }
   );
 
   // Delete all posts authored by the user
@@ -48,7 +47,7 @@ const deleteUser = async (id) => {
 
   // Delete the user
   await user.deleteOne();
-  
+
   return user;
 };
 
@@ -60,32 +59,48 @@ const getFriends = async (id) => {
 const acceptFriend = async (id, friendId) => {
   const user = await getUserByuName(id);
   const friend = await getUserByuName(friendId);
+  
   if (!user || !friend) return null;
-  if (!user.pending.includes(friend.username)) return null;
-  user.pending.pop(friend.username);
+  
+  // Check if friendId is in the pending list
+  const isFriendPending = user.pending.includes(friend.username);
+  if (!isFriendPending) return null; // If not found, return null
+  
+  // Remove friend.username from user.pending using filter
+  user.pending = user.pending.filter(username => username !== friend.username);
+  
+  // Add friend.username to user.friends and user.username to friend.friends
   user.friends.push(friend.username);
   friend.friends.push(user.username);
-  user.save();
-  friend.save();
+  
+  // Save changes to the database
+  await user.save();
+  await friend.save();
+  
   return true;
 };
 
 const rejectFriend = async (id, friendId) => {
   const user = await getUserByuName(id);
   const friend = await getUserByuName(friendId);
+  
   if (!user || !friend) return null;
+  
   if (user.pending.includes(friend.username)) {
-    user.pending.pop(friend.username);
-    user.save();
-    friend.save();
-    return true;
+    // Remove friend.username from user.pending using filter
+    user.pending = user.pending.filter(username => username !== friend.username);
   } else {
-    user.friends.pop(friend.username);
-    friend.friends.pop(user.username);
-    user.save();
-    friend.save();
-    return true;
+    // Remove friend.username from user.friends using filter
+    user.friends = user.friends.filter(username => username !== friend.username);
+    // Remove user.username from friend.friends using filter
+    friend.friends = friend.friends.filter(username => username !== user.username);
   }
+
+  // Save changes to the database
+  await user.save();
+  await friend.save();
+
+  return true;
 };
 
 const pendingFriend = async (id, friendId) => {

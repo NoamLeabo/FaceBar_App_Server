@@ -22,6 +22,7 @@ const updateUser = async (id, password, profileImg) => {
   if (!user) return null;
   user.password = password;
   user.profileImg = profileImg;
+  await Post.updateMany({ author: id }, { profilePic: profileImg });
   await user.save();
   return user;
 };
@@ -30,11 +31,10 @@ const deleteUser = async (id) => {
   const user = await getUserByuName(id);
   if (!user) return null;
 
-  // Remove the user from other users' pending lists
-  await User.updateMany(
+await User.updateMany(
     { pending: user.username },
     { $pull: { pending: user.username } }
-  );
+);
 
   // Remove the user from other users' friends lists
   await User.updateMany(

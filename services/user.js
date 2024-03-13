@@ -20,7 +20,9 @@ const getUserByuName = async (uName) => {
 const updateUser = async (id, password, profileImg) => {
   const user = await getUserByuName(id);
   if (!user) return null;
-  user.password = password;
+  if (password != "") {
+    user.password = password;
+  }
   user.profileImg = profileImg;
   await Post.updateMany({ author: id }, { profilePic: profileImg });
   await user.save();

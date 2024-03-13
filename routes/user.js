@@ -1,36 +1,37 @@
 const userController = require("../controllers/user");
 const postController = require("../controllers/post");
+const { isLoggedIn } = require("../controllers/tokens");
 
 const express = require("express");
 var router = express.Router();
 
-router.route("/").post(userController.createUser).get(userController.getUsers);
+router.route("/").post(userController.createUser).get(isLoggedIn, userController.getUsers);
 
 router
   .route("/:id")
   .get(userController.getUserById)
-  .patch(userController.updateUser)
-  .delete(userController.deleteUser);
+  .patch(isLoggedIn, userController.updateUser)
+  .delete(isLoggedIn, userController.deleteUser);
 
 router
   .route("/:id/posts")
-  .get(postController.getUserPosts)
-  .post(postController.createPost);
+  .get(isLoggedIn, postController.getUserPosts)
+  .post(isLoggedIn, postController.createPost);
 
 router
   .route("/:id/posts/:pid")
-  .patch(postController.updatePost)
-  .delete(postController.deletePost)
-  .post(postController.likePost);
+  .patch(isLoggedIn, postController.updatePost)
+  .delete(isLoggedIn, postController.deletePost)
+  .post(isLoggedIn, postController.likePost);
 
 router
   .route("/:id/friends")
-  .get(userController.getFriends)
-  .post(userController.pendingFriend);
+  .get(isLoggedIn, userController.getFriends)
+  .post(isLoggedIn, userController.pendingFriend);
 
 router
   .route("/:id/friends/:fid")
-  .patch(userController.acceptFriend)
-  .delete(userController.rejectFriend);
+  .patch(isLoggedIn, userController.acceptFriend)
+  .delete(isLoggedIn, userController.rejectFriend);
 
 module.exports = router;

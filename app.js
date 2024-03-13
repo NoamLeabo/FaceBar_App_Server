@@ -7,7 +7,7 @@ var app = express();
 // const key = "Menashe";
 const http = require("http");
 
-const server = http.createServer({ maxHttpHeaderSize: 16384 }, app);
+const server = http.createServer({ maxHttpHeaderSize: 65536 }, app);
 
 const bodyParser = require("body-parser");
 // app.use(bodyParser.urlencoded({ extended: true }));

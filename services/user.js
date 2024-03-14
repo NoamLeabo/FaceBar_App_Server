@@ -71,6 +71,10 @@ const acceptFriend = async (id, friendId) => {
   // Remove friend.username from user.pending using filter
   user.pending = user.pending.filter(username => username !== friend.username);
   
+  const isUserPending = friend.pending.includes(user.username);
+  if (isUserPending)
+  friend.pending = friend.pending.filter(username => username !== user.username);
+
   // Add friend.username to user.friends and user.username to friend.friends
   user.friends.push(friend.username);
   friend.friends.push(user.username);

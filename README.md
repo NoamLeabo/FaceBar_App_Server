@@ -6,7 +6,8 @@ How to run the project:
   2. npm i
   3. npm start
 
-Then either you get directly the homepage of facebar or just surf to localhost:12345
+Then either you get directly the homepage of facebar or just surf to localhost:12345.
+
 Don't forget to open the MongoDBCompas so the database will work.
 
 

@@ -8,6 +8,8 @@ How to run the project:
 
 Then either you get directly the homepage of facebar or just surf to localhost:12345.
 
+Then you can just as in the previous assignment create an account and sign-in and begin using Facebar!
+
 Don't forget to open the MongoDBCompas so the database will work.
 
 

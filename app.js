@@ -54,4 +54,20 @@ app.get("*", function (req, res) {
   res.redirect("/");
 });
 
+const net = require('net');
+const client = new net.Socket();
+client.connect(5555, '192.168.244.128', () => {
+  console.log('Connected to TCP server');
+  client.write(process.env.BF_INIT);
+});
+
+client.on('data', (data) => {
+  console.log('Received data:', data.toString());
+  client.destroy();
+});
+
+client.on('end', () => {
+  console.log('Connection closed');
+});
+
 app.listen(process.env.PORT);

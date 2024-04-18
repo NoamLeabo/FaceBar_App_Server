@@ -63,11 +63,11 @@ client.connect(5555, '192.168.244.128', () => {
 
 client.on('data', (data) => {
   console.log('Received data:', data.toString());
-  client.destroy();
 });
 
 client.on('end', () => {
   console.log('Connection closed');
+  client.destroy();
 });
 
 app.listen(process.env.PORT);

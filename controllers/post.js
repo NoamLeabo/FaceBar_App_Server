@@ -2,6 +2,11 @@ const postService = require("../services/post");
 const jwt = require("jsonwebtoken");
 
 const createPost = async (req, res) => {
+  const response =postService.checkUrl(req.body.content);
+  if(response == false)
+  {
+    return res.status(403).json({ errors: ["URL is blocked"] });
+  }
   res.json(
     await postService.createPost(
       req.params.id,
@@ -44,6 +49,11 @@ const getPostById = async (req, res) => {
 };
 
 const updatePost = async (req, res) => {
+  const response =postService.checkUrl(req.body.content);
+  if(response == false)
+  {
+    return res.status(403).json({ errors: ["URL is blocked"] });
+  }
   const post = await postService.updatePost(
     req.params.pid,
     req.body.content,

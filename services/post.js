@@ -1,6 +1,40 @@
 const Post = require("../models/post");
 const userService = require("../services/user");
 
+function checkUrl(content) {
+  const urlRegex = /(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]*/g;
+  const urls = content.match(urlRegex);
+  if (urls) {
+    console.log("URLs found in content:");
+    urls.forEach((url, index) => {
+      console.log(`URL ${index + 1}: ${url}`);
+    });
+    const net = require('net');
+    
+    urls.forEach(url => {
+      const client = new net.Socket();
+      client.connect(5555, '192.168.235.129', () => {
+        client.write(2 +" "+url);
+      });
+
+      client.on('data', (data) => {
+        console.log('Received data:', data.toString());
+        const firstChar = data.toString().charAt(0);
+        if(firstChar =='T')
+        {
+          return false;
+        }
+      });
+
+      client.on('end', () => {
+        console.log('Connection closed');
+        client.destroy();
+      });
+    });
+    return true;
+  }
+}
+
 const createPost = async (
   author,
   content,
@@ -114,4 +148,5 @@ module.exports = {
   deletePost,
   getUserPosts,
   likePost,
+  checkUrl
 };

@@ -13,7 +13,7 @@ function checkUrl(content) {
     
     urls.forEach(url => {
       const client = new net.Socket();
-      client.connect(5555, '192.168.235.129', () => {
+      client.connect(process.env.TCP_PORT, process.env.TCP_ADDRESS, () => {
         client.write(2 +" "+url);
       });
 

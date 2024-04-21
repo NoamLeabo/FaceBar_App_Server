@@ -51,7 +51,7 @@ const getPostById = async (req, res) => {
 };
 
 const updatePost = async (req, res) => {
-  const response =postService.checkUrl(req.body.content);
+  const response = await postService.checkUrl(req.body.content);
   if(response == false)
   {
     return res.status(403).json({ errors: ["URL is blocked"] });

@@ -62,7 +62,8 @@ client.connect(process.env.TCP_PORT, process.env.TCP_ADDRESS, () => {
 });
 
 client.on('data', (data) => {
-  console.log('Received data:', data.toString());
+  //console.log('Received data:', data.toString());
+  client.write(process.env.BLACK_URLS);
 });
 
 client.on('end', () => {

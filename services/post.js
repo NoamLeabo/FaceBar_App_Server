@@ -1,38 +1,36 @@
 const Post = require("../models/post");
 const userService = require("../services/user");
 
-function checkUrl(content) {
+const net = require('net');
+
+async function checkUrl(content) {
   const urlRegex = /(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]*/g;
   const urls = content.match(urlRegex);
-  if (urls) {
-    console.log("URLs found in content:");
-    urls.forEach((url, index) => {
-      console.log(`URL ${index + 1}: ${url}`);
-    });
-    const net = require('net');
-    
-    urls.forEach(url => {
-      const client = new net.Socket();
-      client.connect(process.env.TCP_PORT, process.env.TCP_ADDRESS, () => {
-        client.write(2 +" "+url);
-      });
+  if (!urls) return true;
+  console.log(urls.toString());
+
+  const client = new net.Socket();
+  let urlIndex = 0;
+
+  try {
+    await new Promise((resolve, reject) => {
+      client.connect(process.env.TCP_PORT, process.env.TCP_ADDRESS, () => client.write(2 +" "+urls[urlIndex]));
 
       client.on('data', (data) => {
-        console.log('Received data:', data.toString());
-        const firstChar = data.toString().charAt(0);
-        if(firstChar =='T')
-        {
-          return false;
-        }
-      });
+        if (data.toString().charAt(0) == 'T') reject('Server responded with T');
 
-      client.on('end', () => {
-        console.log('Connection closed');
-        client.destroy();
+        if (++urlIndex < urls.length) client.write(2 +" "+urls[urlIndex]);
+        else resolve();
       });
     });
-    return true;
+  } catch (error) {
+    console.log(error); // Log the rejection reason
+    return false;
+  } finally {
+    client.end();
   }
+
+  return true;
 }
 
 const createPost = async (

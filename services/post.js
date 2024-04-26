@@ -20,14 +20,17 @@ async function checkUrl(content) {
         if (data.toString().charAt(0) == 'T') reject('Server responded with T');
 
         if (++urlIndex < urls.length) client.write(2 +" "+urls[urlIndex]);
-        else resolve();
+        else {
+          client.write(""); // Save an empty message to the server
+          resolve();
+        }
       });
     });
   } catch (error) {
     console.log(error); // Log the rejection reason
     return false;
   } finally {
-    client.end();
+    client.destroy();
   }
 
   return true;

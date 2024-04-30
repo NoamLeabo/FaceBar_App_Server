@@ -1,6 +1,41 @@
 const Post = require("../models/post");
 const userService = require("../services/user");
 
+const net = require('net');
+
+async function checkUrl(content) {
+  const urlRegex = /(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]*/g;
+  const urls = content.match(urlRegex);
+  if (!urls) return true;
+  console.log(urls.toString());
+
+  const client = new net.Socket();
+  let urlIndex = 0;
+
+  try {
+    await new Promise((resolve, reject) => {
+      client.connect(process.env.TCP_PORT, process.env.TCP_ADDRESS, () => client.write(2 +" "+urls[urlIndex]));
+
+      client.on('data', (data) => {
+        if (data.toString().charAt(0) == 'T') reject('Server responded with T');
+
+        if (++urlIndex < urls.length) client.write(2 +" "+urls[urlIndex]);
+        else {
+          client.write(""); // Save an empty message to the server
+          resolve();
+        }
+      });
+    });
+  } catch (error) {
+    console.log(error); // Log the rejection reason
+    return false;
+  } finally {
+    client.destroy();
+  }
+
+  return true;
+}
+
 const createPost = async (
   author,
   content,
@@ -114,4 +149,5 @@ module.exports = {
   deletePost,
   getUserPosts,
   likePost,
+  checkUrl
 };
